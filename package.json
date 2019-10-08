@@ -1,0 +1,37 @@
+{
+  "name": "@akaiv/discord-client",
+  "version": "1.0.0",
+  "description": "Akaiv discord client",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -r ts-node/register ./tests/*.test.ts",
+    "build": "./node_modules/.bin/tsc",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": {
+    "name": "storycraft",
+    "email": "storycraft@storyboard.ml",
+    "url": "https://storyboard.ml"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.3",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.11",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akai-v/discord-client.git"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.1",
+    "discord.js": "^11.5.1"
+  }
+}
