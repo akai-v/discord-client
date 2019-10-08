@@ -1,5 +1,5 @@
 import { DiscordClient } from "./discord-client";
-import { TemplateHandler, RichMessageTemplate, Channel, UserMessage, AttachmentTemplate } from "@akaiv/core";
+import { TemplateHandler, RichMessageTemplate, UserMessage, AttachmentTemplate } from "@akaiv/core";
 import { DiscordChannel } from "./discord-wrapped";
 import { TextChannel, GroupDMChannel, DMChannel, Attachment as DiscordAttachment } from "discord.js";
 
@@ -34,7 +34,9 @@ export class AttachmentTemplateHandler extends TemplateHandler<DiscordClient> {
                 list.push(...this.Client.getSentMessageList(await internalChannel.send('', new DiscordAttachment(attachment.Buffer, attachment.Name))));
             }
 
-            internalChannel.stopTyping();
+            internalChannel.stopTyping(true);
+
+            return list;
         }
 
         throw new Error(`Can't send template message ${template.toString()} to ${channel.IdentityId}. Target channel is not text channel`);

@@ -100,8 +100,4 @@ export class DiscordMessage extends UserMessage {
         return (this.Channel.Client as DiscordClient).getWrappedMessage(message);
     }
 
-    editRichTemplate(template: RichMessageTemplate): Promise<UserMessage> {
-        throw new Error("Method not implemented.");
-    }
-
 }

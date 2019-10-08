@@ -103,11 +103,11 @@ export class DiscordClient extends BaseClient {
         return wrappedChannel;
     }
 
-    isValidUser(user: User) {
+    isValidUser(user: User): boolean {
         return user instanceof DiscordUser && user.Client === this;
     }
 
-    isValidChannel(channel: Channel) {
+    isValidChannel(channel: Channel): boolean {
         return channel instanceof DiscordChannel && channel.Client === this;
     }
 
@@ -148,9 +148,13 @@ export class DiscordClient extends BaseClient {
         let internalChannel = (channel as DiscordChannel).InternalChannel;
         
         if (internalChannel instanceof TextChannel || internalChannel instanceof GroupDMChannel || internalChannel instanceof DMChannel) {
-            internalChannel.startTyping(5);
+            internalChannel.startTyping();
 
-            return this.getSentMessageList(await internalChannel.send(text));
+            let message = await internalChannel.send(text);
+
+            internalChannel.stopTyping(true);
+
+            return this.getSentMessageList(message);
         }
 
         throw new Error("Channel does not allow message sending");
