@@ -2,7 +2,7 @@ import { User as InternalDiscordUser, Channel as InternalDiscordChannel, GroupDM
 
 import { DiscordClient } from ".";
 
-import { UserMessage, RichMessageTemplate, User, Channel, MessageAttachment } from "@akaiv/core";
+import { UserMessage, User, Channel, MessageAttachment } from "@akaiv/core";
 
 /*
  * Created on Tue Oct 08 2019
@@ -98,6 +98,16 @@ export class DiscordMessage extends UserMessage {
         let message = await this.interalMessage.edit(text);
 
         return (this.Channel.Client as DiscordClient).getWrappedMessage(message);
+    }
+
+    async delete() {
+        try {
+            await this.interalMessage.delete();
+        } catch (e) {
+            return false;
+        }
+
+        return true;
     }
 
 }

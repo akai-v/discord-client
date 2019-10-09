@@ -9,7 +9,7 @@
     "prepublishOnly": "npm run test && npm run build"
   },
   "keywords": [
-    "bot"
+    "bot client"
   ],
   "author": {
     "name": "storycraft",
