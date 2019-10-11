@@ -37,6 +37,10 @@ export class DiscordUser extends User {
         return true;
     }
 
+    async getAvatarURL(): Promise<string> {
+        return this.internalUser.avatarURL;
+    }
+
     async getDMChannel(): Promise<Channel> {
         if (this.internalUser.dmChannel) {
             return this.Client.getChannelFromInternal(this.internalUser.dmChannel);
