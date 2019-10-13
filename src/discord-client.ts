@@ -188,4 +188,12 @@ export class DiscordClientUser extends ClientUser {
         return false;
     }
 
+    get HasAvatar() {
+        return true;
+    }
+
+    async getAvatarURL(): Promise<string> {
+        return this.Client.Internal.user.avatarURL;
+    }
+
 }

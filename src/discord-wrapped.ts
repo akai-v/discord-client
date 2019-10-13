@@ -37,6 +37,10 @@ export class DiscordUser extends User {
         return true;
     }
 
+    get HasAvatar() {
+        return true;
+    }
+
     async getAvatarURL(): Promise<string> {
         return this.internalUser.avatarURL;
     }
