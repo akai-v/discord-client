@@ -104,11 +104,11 @@ export class DiscordClient extends BaseClient {
     }
 
     isValidUser(user: User): boolean {
-        return user instanceof DiscordUser && user.Client === this;
+        return user && this.userMap.get(user.Id) === user;
     }
 
     isValidChannel(channel: Channel): boolean {
-        return channel instanceof DiscordChannel && channel.Client === this;
+        return channel && this.channelMap.get(channel.Id) === channel;
     }
 
     protected onClientMessage(internalMessage: InternalDiscordMessage) {
@@ -163,10 +163,7 @@ export class DiscordClient extends BaseClient {
 }
 
 export class DiscordClientHandler extends ClientHandler<DiscordClient> {
-
-    constructor(client: DiscordClient, bot: Bot) {
-        super(client, bot);
-    }
+    
 }
 
 export class DiscordClientUser extends ClientUser {
@@ -189,6 +186,14 @@ export class DiscordClientUser extends ClientUser {
 
     get HasDMChannel() {
         return false;
+    }
+
+    get HasAvatar() {
+        return true;
+    }
+
+    async getAvatarURL(): Promise<string> {
+        return this.Client.Internal.user.avatarURL;
     }
 
 }

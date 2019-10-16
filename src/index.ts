@@ -6,5 +6,4 @@
 
 
 export * from "./discord-client";
-export * from "./discord-wrapped";
 export * from "./discord-template-handler";
