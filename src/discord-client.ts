@@ -18,7 +18,9 @@ export class DiscordClient extends BaseClient {
     private channelMap: Map<string, DiscordChannel>;
     private userMap: Map<string, DiscordUser>;
 
-    constructor(token: string) {
+    constructor({ token }: {
+        token: string
+    }) {
         super();
         this.botToken = token;
 
