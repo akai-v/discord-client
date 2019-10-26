@@ -11,6 +11,8 @@ class TestDiscordClient extends DiscordClient {
 
 }
 
-let client = new TestDiscordClient('');
+let client = new TestDiscordClient({
+    token: ''
+});
 
 // umm how should we test
