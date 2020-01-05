@@ -68,7 +68,7 @@ export class DiscordClient extends BaseClient {
 
             this.discord.once('ready', resolve);
 
-            this.Logger.info(`Client logined as ${this.ClientUser!.Name}`);
+            this.Logger.info(`Client logined as ${this.discord.user.username}`);
         });
     }
 
