@@ -61,15 +61,14 @@ export class DiscordClient extends BaseClient {
         this.discord = new Discord();
 
         this.discord.login(this.botToken);
-        
-        
-        return new Promise((resolve, reject) => {
-            this.discord.on('message', this.onClientMessage.bind(this));
 
+        this.discord.on('message', this.onClientMessage.bind(this));
+        
+        await new Promise((resolve, reject) => {
             this.discord.once('ready', resolve);
-
-            this.Logger.info(`Client logined as ${this.discord.user.username}`);
         });
+
+        this.Logger.info(`Client logined as ${this.discord.user.username}`);
     }
 
     protected async stopClient(): Promise<void> {
