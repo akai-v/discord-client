@@ -13,7 +13,7 @@ import { TextChannel, GroupDMChannel, DMChannel, Attachment as DiscordAttachment
 export class AttachmentTemplateHandler extends TemplateHandler<DiscordClient> {
 
     canHandle(template: RichMessageTemplate): boolean {
-        return template && template instanceof AttachmentTemplate;
+        return template && template.TemplateName === 'attachment';
     }
     
     async send(template: AttachmentTemplate, channel: DiscordChannel): Promise<UserMessage[]> {
