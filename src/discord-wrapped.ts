@@ -1,4 +1,4 @@
-import { User as InternalDiscordUser, Channel as InternalDiscordChannel, GroupDMChannel, GuildChannel, DMChannel, Message as InternalDiscordMessage } from "discord.js";
+import { User as InternalDiscordUser, Channel as InternalDiscordChannel, GroupDMChannel, GuildChannel, DMChannel, Message as InternalDiscordMessage, TextChannel, TextBasedChannel } from "discord.js";
 
 import { DiscordClient } from ".";
 
@@ -65,6 +65,10 @@ export class DiscordChannel extends Channel {
         this.internalChannel = internalChannel;
     }
 
+    get Client() {
+        return super.Client as DiscordClient;
+    }
+
     get InternalChannel() {
         return this.internalChannel;
     }
@@ -77,6 +81,18 @@ export class DiscordChannel extends Channel {
         }
 
         return this.internalChannel.id;
+    }
+
+    async getUserList() {
+        if (this.internalChannel instanceof TextChannel) {
+            return this.internalChannel.members.map((member) => this.Client.getUserFromInternal(member.user));
+        } else if (this.internalChannel instanceof GroupDMChannel) {
+            return this.internalChannel.recipients.map((recipient) => this.Client.getUserFromInternal(recipient));
+        } else if (this.internalChannel instanceof DMChannel) {
+            return [ this.Client.getUserFromInternal(this.internalChannel.recipient) ];
+        } else {
+            return [];
+        }
     }
 }
 
