@@ -101,7 +101,7 @@ export class DiscordMessage extends UserMessage {
     private interalMessage: InternalDiscordMessage;
 
     constructor(sender: User, channel: Channel, interalMessage: InternalDiscordMessage, attachmentList: MessageAttachment[] = []) {
-        super(sender, channel, interalMessage.content, attachmentList);
+        super(sender, channel, interalMessage.content, interalMessage.createdTimestamp, attachmentList);
 
         this.interalMessage = interalMessage;
     }
