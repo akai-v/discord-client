@@ -1,8 +1,8 @@
-import { User as InternalDiscordUser, Channel as InternalDiscordChannel, GroupDMChannel, GuildChannel, DMChannel, Message as InternalDiscordMessage, TextChannel, TextBasedChannel } from "discord.js";
+import { User as InternalDiscordUser, Channel as InternalDiscordChannel, GroupDMChannel, GuildChannel, DMChannel, Message as InternalDiscordMessage, TextChannel, TextBasedChannel, Attachment } from "discord.js";
 
 import { DiscordClient } from ".";
 
-import { UserMessage, User, Channel, MessageAttachment } from "@akaiv/core";
+import { UserMessage, User, Channel, MessageAttachment, AttachmentType } from "@akaiv/core";
 
 /*
  * Created on Tue Oct 08 2019
@@ -98,12 +98,31 @@ export class DiscordChannel extends Channel {
 
 export class DiscordMessage extends UserMessage {
 
+    static getAttachmentListFromMessage(internalMessage: InternalDiscordMessage): MessageAttachment[] {
+        let list: MessageAttachment[] = [];
+
+        for (let [id, rawAttachment] of internalMessage.attachments) {
+            let fileName = rawAttachment.filename;
+
+            if (fileName.endsWith('.png') || fileName.endsWith('jpg')) {
+                list.push(new MessageAttachment(AttachmentType.IMAGE, rawAttachment.url));
+            } else if (fileName.endsWith('.mp4')) {
+                list.push(new MessageAttachment(AttachmentType.VIDEO, rawAttachment.url));
+            } else {
+                list.push(new MessageAttachment(AttachmentType.FILE, rawAttachment.url));
+            }
+        }
+
+
+        return list;
+    }
+
     private interalMessage: InternalDiscordMessage;
 
-    constructor(sender: User, channel: Channel, interalMessage: InternalDiscordMessage, attachmentList: MessageAttachment[] = []) {
-        super(sender, channel, interalMessage.content, interalMessage.createdTimestamp, attachmentList);
+    constructor(sender: User, channel: Channel, internalMessage: InternalDiscordMessage) {
+        super(sender, channel, internalMessage.content, internalMessage.createdTimestamp, DiscordMessage.getAttachmentListFromMessage(internalMessage));
 
-        this.interalMessage = interalMessage;
+        this.interalMessage = internalMessage;
     }
 
     get InternalMessage() {
