@@ -11,6 +11,8 @@ import { AttachmentTemplateHandler } from "./discord-template-handler";
 
 export class DiscordClient extends BaseClient {
 
+    private static readonly MAX_TEXT_MESSAGE_LENGTH = 2000;
+
     private discord: Discord;
 
     private botToken: string;
@@ -43,6 +45,10 @@ export class DiscordClient extends BaseClient {
 
     get ClientName(): string {
         return 'Discord';
+    }
+
+    get MaxMessageTextLength() {
+        return DiscordClient.MAX_TEXT_MESSAGE_LENGTH;
     }
 
     get ChannelList(): Channel[] {
@@ -148,16 +154,29 @@ export class DiscordClient extends BaseClient {
             throw new Error("Target channel is pointing wrong client.");
         }
 
+        if (text.length < 1) return [];
+
         let internalChannel = (channel as DiscordChannel).InternalChannel;
         
         if (internalChannel instanceof TextChannel || internalChannel instanceof GroupDMChannel || internalChannel instanceof DMChannel) {
             internalChannel.startTyping();
 
-            let message = await internalChannel.send(text);
+            let chunkSize = Math.ceil(text.length / DiscordClient.MAX_TEXT_MESSAGE_LENGTH);
+
+            let messageList: UserMessage[] = [];
+
+            for (let i = 0; i < chunkSize; i++) {
+                let textChunk = text.substr(i * DiscordClient.MAX_TEXT_MESSAGE_LENGTH, DiscordClient.MAX_TEXT_MESSAGE_LENGTH);
+
+                let message = await internalChannel.send(textChunk);
+
+
+                messageList = messageList.concat(this.getSentMessageList(message));
+            }
 
             internalChannel.stopTyping(true);
 
-            return this.getSentMessageList(message);
+            return messageList;
         }
 
         throw new Error("Channel does not allow message sending");
