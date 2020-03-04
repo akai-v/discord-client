@@ -1,7 +1,7 @@
 import { Bot, Channel, UserMessage, User, BaseClient, ClientHandler, ClientUser } from "@akaiv/core";
 import { Client as Discord, Channel as InternalDiscordChannel, User as InternalDiscordUser, Message as InternalDiscordMessage, DMChannel, GroupDMChannel, TextChannel } from "discord.js";
 import { DiscordMessage, DiscordChannel, DiscordUser } from "./discord-wrapped";
-import { AttachmentTemplateHandler } from "./discord-template-handler";
+import { AttachmentTemplateHandler, TitledLinkImageTemplateHandler } from "./discord-template-handler";
 
 /*
  * Created on Sun Oct 06 2019
@@ -33,6 +33,7 @@ export class DiscordClient extends BaseClient {
         this.userMap = new Map();
 
         this.RichHandlerList.push(new AttachmentTemplateHandler(this));
+        this.RichHandlerList.push(new TitledLinkImageTemplateHandler(this));
     }
 
     get Internal() {
