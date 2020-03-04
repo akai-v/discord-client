@@ -1,7 +1,7 @@
 import { DiscordClient } from "./discord-client";
-import { TemplateHandler, RichMessageTemplate, UserMessage, AttachmentTemplate } from "@akaiv/core";
+import { TemplateHandler, RichMessageTemplate, UserMessage, AttachmentTemplate, TitledLinkImageTemplate } from "@akaiv/core";
 import { DiscordChannel } from "./discord-wrapped";
-import { TextChannel, GroupDMChannel, DMChannel, Attachment as DiscordAttachment } from "discord.js";
+import { TextChannel, GroupDMChannel, DMChannel, Attachment as DiscordAttachment, RichEmbed } from "discord.js";
 
 /*
  * Created on Tue Oct 08 2019
@@ -43,4 +43,19 @@ export class AttachmentTemplateHandler extends TemplateHandler<DiscordClient> {
     }
 
 
+}
+
+export class TitledLinkImageTemplateHandler extends TemplateHandler<DiscordClient> {
+
+    canHandle(template: RichMessageTemplate): boolean {
+        return template && template.TemplateName === 'LINKIMAGE';
+    }
+
+    async send(template: TitledLinkImageTemplate, channel: DiscordChannel): Promise<UserMessage[]> {
+        let chan: TextChannel = channel.InternalChannel as TextChannel;
+
+        let embed = new RichEmbed().setColor('#ffffff').setTitle(template.Title).setURL(template.HrefURL).setImage(template.ImageURL);
+
+        return this.Client.getSentMessageList(await chan.send(embed));
+    }
 }
